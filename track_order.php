@@ -37,6 +37,26 @@ if ($order_id) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Tracking</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateOrderStatus() {
+            var orderId = <?php echo $order_id; ?>;
+            if (orderId) {
+                $.ajax({
+                    url: 'get_order_status.php',
+                    type: 'GET',
+                    data: { order_id: orderId },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        $('#order-status').text(data.status);
+                        $('.step').removeClass('completed');
+                        $('.step:contains("' + data.status + '")').addClass('completed');
+                    }
+                });
+            }
+        }
+        setInterval(updateOrderStatus, 5000); // Refresh every 5 seconds
+    </script>
 </head>
 <body>
     <div class="container">
@@ -49,7 +69,7 @@ if ($order_id) {
         <?php if ($order): ?>
             <h2>Order Details</h2>
             <p><strong>Order ID:</strong> <?php echo $order['id']; ?></p>
-            <p><strong>Status:</strong> <?php echo $order['status']; ?></p>
+            <p><strong>Status:</strong> <span id="order-status"><?php echo $order['status']; ?></span></p>
             <p><strong>Total Price:</strong> $<?php echo number_format($order['total_price'], 2); ?></p>
 
             <h2>Order Progress</h2>
