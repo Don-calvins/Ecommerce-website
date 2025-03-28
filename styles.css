@@ -5,6 +5,7 @@ body {
     padding: 0;
     background-color: #121212;
     color: #f1c40f;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .container {
@@ -16,6 +17,11 @@ body {
 .navbar {
     background: #000;
     padding: 15px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
 }
 
 .navbar .container {
@@ -29,6 +35,12 @@ body {
     font-weight: 600;
     color: #f1c40f;
     text-decoration: none;
+    transform: translateY(-5px);
+    transition: transform 0.3s;
+}
+
+.navbar .logo:hover {
+    transform: translateY(0);
 }
 
 .nav-links {
@@ -41,6 +53,12 @@ body {
     color: #f1c40f;
     text-decoration: none;
     font-weight: 400;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.nav-links li a:hover {
+    color: #e1b700;
+    transform: scale(1.1);
 }
 
 /* Hero Section */
@@ -48,16 +66,43 @@ body {
     text-align: center;
     padding: 100px 0;
     background: linear-gradient(to bottom, #000, #1a1a1a);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .hero h1 {
     font-size: 48px;
     margin-bottom: 20px;
+    animation: slideIn 1s ease-in-out;
 }
 
 .hero p {
     font-size: 18px;
     margin-bottom: 30px;
+    animation: slideIn 1.2s ease-in-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .btn {
@@ -68,11 +113,12 @@ body {
     font-weight: 600;
     text-decoration: none;
     border-radius: 5px;
-    transition: 0.3s;
+    transition: background 0.3s, transform 0.2s;
 }
 
 .btn:hover {
     background: #e1b700;
+    transform: scale(1.1);
 }
 
 /* Product Showcase */
@@ -93,6 +139,14 @@ body {
     border-radius: 10px;
     text-align: center;
     width: 250px;
+    transition: transform 0.3s ease-in-out;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s ease-in-out forwards 0.5s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
 }
 
 .product-card img {
@@ -116,6 +170,8 @@ body {
     text-align: center;
     padding: 20px 0;
     margin-top: 50px;
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards 1s;
 }
 
 .footer p {
@@ -134,4 +190,9 @@ body {
     color: #f1c40f;
     text-decoration: none;
     font-weight: 500;
+    transition: transform 0.3s;
+}
+
+.social-links li a:hover {
+    transform: scale(1.2);
 }
