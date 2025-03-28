@@ -1,9 +1,19 @@
 <?php
 include 'db_config.php'; // Database connection
 
-// Fetch products from the database
-$query = "SELECT * FROM products ORDER BY created_at DESC";
+// Check if product ID is provided
+if (!isset($_GET['id'])) {
+    die("Product not found");
+}
+$product_id = intval($_GET['id']);
+
+// Fetch product details
+$query = "SELECT * FROM products WHERE id = $product_id";
 $result = mysqli_query($conn, $query);
+$product = mysqli_fetch_assoc($result);
+if (!$product) {
+    die("Product not found");
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,34 +21,23 @@ $result = mysqli_query($conn, $query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Listing</title>
+    <title><?php echo $product['name']; ?></title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Our Products</h1>
-        <input type="text" id="searchBar" placeholder="Search products...">
-        <div class="product-grid">
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <div class="product-card">
-                    <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>">
-                    <h3><?php echo $row['name']; ?></h3>
-                    <p class="price">$<?php echo number_format($row['price'], 2); ?></p>
-                    <a href="product_details.php?id=<?php echo $row['id']; ?>" class="btn">View Details</a>
-                </div>
-            <?php } ?>
+        <div class="product-details">
+            <img src="<?php echo $product['image_url']; ?>" alt="<?php echo $product['name']; ?>">
+            <div class="details">
+                <h1><?php echo $product['name']; ?></h1>
+                <p class="price">$<?php echo number_format($product['price'], 2); ?></p>
+                <p><?php echo $product['description']; ?></p>
+                <form action="cart.php" method="POST">
+                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                    <button type="submit" class="btn">Add to Cart</button>
+                </form>
+            </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById("searchBar").addEventListener("keyup", function() {
-            let filter = this.value.toLowerCase();
-            let products = document.querySelectorAll(".product-card");
-            products.forEach(product => {
-                let name = product.querySelector("h3").textContent.toLowerCase();
-                product.style.display = name.includes(filter) ? "block" : "none";
-            });
-        });
-    </script>
 </body>
 </html>
